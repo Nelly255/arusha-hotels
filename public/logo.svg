@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" width="400" height="100">
+  <defs>
+    <linearGradient id="sunset" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FBBF24" /> <stop offset="100%" stop-color="#EA580C" /> </linearGradient>
+    
+    <clipPath id="circle-clip">
+      <circle cx="40" cy="50" r="32" />
+    </clipPath>
+  </defs>
+
+  <g transform="translate(10, 0)">
+    <circle cx="40" cy="50" r="32" fill="url(#sunset)" />
+    
+    <g clip-path="url(#circle-clip)">
+        <polygon points="5,75 30,35 65,75" fill="#ffffff" opacity="0.95"/>
+        <polygon points="35,85 55,45 85,85" fill="#e5e7eb" opacity="0.7"/>
+    </g>
+  </g>
+
+  <text x="95" y="56" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="32" fill="#ffffff" letter-spacing="-1">Arusha Hotels</text>
+  
+  <text x="98" y="78" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="10" fill="#FBBF24" letter-spacing="2">REST BEFORE THE ADVENTURE.</text>
+</svg>

@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   
   // --- THIS ADDS YOUR LOGO TO THE BROWSER TAB ---
   icons: {
-    icon: '/favicon.ico', 
+    icon: '/icon.png', 
     apple: '/apple-touch-icon.png', 
   },
 

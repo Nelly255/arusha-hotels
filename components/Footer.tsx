@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { supabase } from "../lib/supabase";
+import Newsletter from "./Newsletter"; // 🚀 IMPORTED THE NEWSLETTER HERE 🚀
 
 export default function Footer() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -43,25 +44,28 @@ export default function Footer() {
 
   return (
     <>
+      {/* 🚀 THE VIP NEWSLETTER CAPTURE IS NOW GLOBAL 🚀 */}
+      <Newsletter />
+
       <footer className="relative border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#050505] pt-16 pb-8 overflow-hidden z-10 transition-colors duration-500">
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[40rem] h-[20rem] bg-blue-500/5 dark:bg-blue-600/10 blur-[100px] rounded-t-full pointer-events-none"></div>
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[40rem] h-[20rem] bg-blue-500/5 dark:bg-blue-600/10 blur-[100px] rounded-t-full pointer-events-none transition-colors duration-500"></div>
 
         <div className="max-w-[1300px] mx-auto px-6 md:px-8 relative z-10">
-          {/* 🚀 EXPANDED TO 4 COLUMNS 🚀 */}
+          
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
             
             {/* Branding */}
             <div className="lg:col-span-1">
-              <h2 className="text-2xl font-black text-gray-900 dark:text-white mb-4 tracking-tight">Arusha Hotels.</h2>
-              <p className="text-gray-600 dark:text-white/50 text-sm leading-relaxed mb-6 max-w-sm">
+              <h2 className="text-2xl font-black text-gray-900 dark:text-white mb-4 tracking-tight transition-colors duration-500">Arusha Hotels.</h2>
+              <p className="text-gray-600 dark:text-white/50 text-sm leading-relaxed mb-6 max-w-sm transition-colors duration-500">
                 The premier digital directory for luxury, boutique, and safari basecamp accommodations in Arusha, Tanzania. Find your perfect stay.
               </p>
-              <p className="text-gray-400 dark:text-white/30 text-xs font-bold uppercase tracking-widest">Est. 2026</p>
+              <p className="text-gray-400 dark:text-white/30 text-xs font-bold uppercase tracking-widest transition-colors duration-500">Est. 2026</p>
             </div>
 
             {/* Explore Links */}
             <div>
-              <h3 className="text-gray-900 dark:text-white font-bold mb-4 uppercase tracking-widest text-xs">Explore</h3>
+              <h3 className="text-gray-900 dark:text-white font-bold mb-4 uppercase tracking-widest text-xs transition-colors duration-500">Explore</h3>
               <ul className="space-y-3">
                 <li><Link href="/" className="text-gray-600 dark:text-white/60 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm font-medium">Home / Directory</Link></li>
                 <li><Link href="/explore" className="text-gray-600 dark:text-white/60 hover:text-orange-500 dark:hover:text-orange-400 transition-colors text-sm font-medium">Discover Arusha</Link></li>
@@ -69,9 +73,9 @@ export default function Footer() {
               </ul>
             </div>
 
-            {/* 🚀 NEW CONTACT SECTION 🚀 */}
+            {/* Contact Section */}
             <div>
-              <h3 className="text-gray-900 dark:text-white font-bold mb-4 uppercase tracking-widest text-xs">Reach Out</h3>
+              <h3 className="text-gray-900 dark:text-white font-bold mb-4 uppercase tracking-widest text-xs transition-colors duration-500">Reach Out</h3>
               <ul className="space-y-4">
                 <li>
                   <a href="mailto:info@arushahotels.com" className="group flex items-center gap-3">
@@ -94,21 +98,22 @@ export default function Footer() {
 
             {/* Partnerships */}
             <div>
-              <h3 className="text-gray-900 dark:text-white font-bold mb-4 uppercase tracking-widest text-xs">Partnerships</h3>
-              <p className="text-gray-600 dark:text-white/50 text-sm mb-6">
+              <h3 className="text-gray-900 dark:text-white font-bold mb-4 uppercase tracking-widest text-xs transition-colors duration-500">Partnerships</h3>
+              <p className="text-gray-600 dark:text-white/50 text-sm mb-6 transition-colors duration-500">
                 Are you a hotel owner in Arusha? Get listed on our platform and reach thousands of international tourists.
               </p>
+              {/* 🚀 UPGRADED: Premium architectural shadow and refined border 🚀 */}
               <button 
                 onClick={() => setIsModalOpen(true)}
-                className="inline-block bg-white dark:bg-white/10 hover:bg-gray-100 dark:hover:bg-white/20 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white px-6 py-3 rounded-xl text-sm font-bold transition-all shadow-sm dark:shadow-lg active:scale-95"
+                className="inline-block bg-white dark:bg-white/10 hover:bg-gray-50 dark:hover:bg-white/20 border border-gray-200/80 dark:border-white/10 text-gray-900 dark:text-white px-6 py-3 rounded-xl text-sm font-bold transition-all shadow-[0_4px_14px_rgba(0,0,0,0.03)] dark:shadow-lg active:scale-95"
               >
                 List Your Property ↗
               </button>
             </div>
           </div>
 
-          <div className="border-t border-gray-200 dark:border-white/10 pt-8 flex flex-col justify-center items-center gap-4">
-            <p className="text-gray-500 dark:text-white/30 text-xs font-medium text-center">
+          <div className="border-t border-gray-200 dark:border-white/10 pt-8 flex flex-col justify-center items-center gap-4 transition-colors duration-500">
+            <p className="text-gray-500 dark:text-white/30 text-xs font-medium text-center transition-colors duration-500">
               © {new Date().getFullYear()} arushahotels.com All rights reserved.
             </p>
           </div>

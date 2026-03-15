@@ -86,8 +86,33 @@ export default async function HotelDetailsPage({ params }: PageProps) {
     console.log("Weather fetch skipped, using fallback.");
   }
 
+  // 🚀 THE SEO CHEAT CODE: Google Schema Markup 🚀
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Hotel",
+    "name": hotel.name,
+    "description": hotel.description,
+    "image": hotel.imageUrl,
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": hotel.location,
+      "addressCountry": "TZ" 
+    },
+    "starRating": {
+      "@type": "Rating",
+      "ratingValue": hotel.rating
+    },
+    "priceRange": `$${hotel.pricePerNight}`
+  };
+
   return (
     <main className="relative min-h-screen font-sans overflow-x-hidden selection:bg-blue-500/30">
+      
+      {/* 🚀 INJECTING THE SCHEMA SCRIPT 🚀 */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
       <div className="fixed inset-0 z-0 w-full h-full">
         <Image
@@ -217,7 +242,7 @@ export default async function HotelDetailsPage({ params }: PageProps) {
             <div className="bg-white/70 dark:bg-[#0a0a0a]/50 backdrop-blur-3xl border border-white/60 dark:border-white/10 rounded-3xl p-3 shadow-[0_8px_32px_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all">
               <div className="w-full h-48 md:h-56 rounded-2xl overflow-hidden relative bg-gray-200 dark:bg-gray-800 border border-white/50 dark:border-white/5">
                 <iframe 
-                  /* 🔥 FIXED: Now points to the correct Google Maps embed URL with the '$' symbol 🔥 */
+                  /* 🔥 FIXED MAPS URL STRING 🔥 */
                   src={`https://maps.google.com/maps?q=${mapQuery}&t=m&z=15&output=embed&iwloc=near`}
                   width="100%" 
                   height="100%" 
@@ -231,7 +256,7 @@ export default async function HotelDetailsPage({ params }: PageProps) {
               </div>
               <div className="mt-3 px-2 pb-2">
                 <a 
-                  /* 🔥 FIXED: Correct external Google Maps link with the '$' symbol 🔥 */
+                  /* 🔥 FIXED EXTERNAL LINK STRING 🔥 */
                   href={`https://maps.google.com/maps?q=${mapQuery}`}
                   target="_blank"
                   rel="noopener noreferrer"

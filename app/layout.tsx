@@ -1,20 +1,34 @@
 import './globals.css';
 import { Montserrat } from 'next/font/google'; 
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 
-// Using Montserrat to match that clean, wide, premium look!
 const montserrat = Montserrat({ 
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800', '900'], // Montserrat safely supports all of these weights
+  weight: ['400', '500', '600', '700', '800', '900'], 
 });
 
-// --- THIS IS THE SEO MAGIC FOR WHATSAPP/INSTAGRAM PREVIEWS ---
+// Ensures the site is responsive and looks great on mobile
+export const viewport: Viewport = {
+  themeColor: '#050505',
+  width: 'device-width',
+  initialScale: 1,
+};
+
+// 🚀 UPGRADED PREMIUM SEO METADATA 🚀
 export const metadata: Metadata = {
-  title: 'Arusha Hotels | Rest Before the Adventure.',
-  description: 'The ultimate curated directory for luxury, boutique, and premium hotels in Arusha, Tanzania. Discover your perfect stay today.',
+  title: 'Arusha Hotels | The Premier Safari & Luxury Accommodation Directory',
+  description: 'Discover the best hotels, lodges, and safari camps in Arusha, Tanzania. Compare top-rated accommodations, view real-time weather, and book your perfect stay.',
+  keywords: ["Arusha hotels", "Tanzania safari lodges", "where to stay in Arusha", "Serengeti basecamp", "luxury hotels Arusha"],
+  
+  // --- THIS ADDS YOUR LOGO TO THE BROWSER TAB ---
+  icons: {
+    icon: '/favicon.ico', 
+    apple: '/apple-touch-icon.png', 
+  },
+
   openGraph: {
-    title: 'Arusha Hotels | Find Your Perfect Stay',
-    description: 'The ultimate curated directory for luxury and premium hotels in Arusha.',
+    title: 'Arusha Hotels | The Premier Safari & Luxury Accommodation Directory',
+    description: 'Discover the best hotels, lodges, and safari camps in Arusha, Tanzania. Compare top-rated accommodations and book your perfect stay.',
     url: 'https://arushahotels.com', 
     siteName: 'Arusha Hotels',
     images: [
@@ -30,8 +44,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Arusha Hotels | Premium Directory',
-    description: 'Discover the best luxury and boutique hotels in Arusha.',
+    title: 'Arusha Hotels | The Premier Safari & Luxury Accommodation Directory',
+    description: 'Discover the best hotels, lodges, and safari camps in Arusha, Tanzania.',
     images: ['https://images.unsplash.com/photo-1517826500585-e1104eece292?q=80&w=1200&auto=format&fit=crop'],
   },
 };
@@ -43,7 +57,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      {/* Applied Montserrat globally to the body */}
       <body className={`${montserrat.className} bg-[#050505] text-slate-100 antialiased selection:bg-blue-500/30`}>
         {children}
       </body>

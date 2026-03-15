@@ -103,7 +103,6 @@ export default async function HotelDetailsPage({ params }: PageProps) {
       </div>
 
       <div className="fixed top-8 left-4 md:left-8 z-50">
-        {/* PATCHED: Now correctly points back to /directory */}
         <Link
           href="/directory"
           className="group flex items-center gap-3 bg-white/10 hover:bg-white/20 dark:bg-black/30 dark:hover:bg-black/50 backdrop-blur-md border border-white/20 px-5 py-2.5 rounded-full transition-all duration-300 text-white shadow-lg hover:shadow-xl hover:scale-105"
@@ -162,7 +161,8 @@ export default async function HotelDetailsPage({ params }: PageProps) {
               </div>
             </div>
             
-            <InteractiveBookingCard price={hotel.pricePerNight} officialUrl={hotel.officialUrl} />
+            {/* The upgraded dual-button InteractiveBookingCard! */}
+            <InteractiveBookingCard price={hotel.pricePerNight} officialUrl={hotel.officialUrl} booking_url={hotel.booking_url} />
 
             {(hotel.phone_number || hotel.instagram_handle) && (
               <div className="bg-white/70 dark:bg-[#0a0a0a]/50 backdrop-blur-3xl border border-white/60 dark:border-white/10 rounded-3xl p-8 shadow-[0_8px_32px_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all">
@@ -217,7 +217,7 @@ export default async function HotelDetailsPage({ params }: PageProps) {
             <div className="bg-white/70 dark:bg-[#0a0a0a]/50 backdrop-blur-3xl border border-white/60 dark:border-white/10 rounded-3xl p-3 shadow-[0_8px_32px_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all">
               <div className="w-full h-48 md:h-56 rounded-2xl overflow-hidden relative bg-gray-200 dark:bg-gray-800 border border-white/50 dark:border-white/5">
                 <iframe 
-                  /* PATCHED: Corrected Google Maps embed URL */
+                  /* 🔥 FIXED: Now points to the correct Google Maps embed URL with the '$' symbol 🔥 */
                   src={`https://maps.google.com/maps?q=${mapQuery}&t=m&z=15&output=embed&iwloc=near`}
                   width="100%" 
                   height="100%" 
@@ -231,7 +231,7 @@ export default async function HotelDetailsPage({ params }: PageProps) {
               </div>
               <div className="mt-3 px-2 pb-2">
                 <a 
-                  /* PATCHED: Corrected external map link */
+                  /* 🔥 FIXED: Correct external Google Maps link with the '$' symbol 🔥 */
                   href={`https://maps.google.com/maps?q=${mapQuery}`}
                   target="_blank"
                   rel="noopener noreferrer"

@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Caveat_Brush } from "next/font/google";
 import { supabase } from "../lib/supabase";
 import HotelCard from "../components/HotelCard";
+import Newsletter from "../components/Newsletter";
 import Footer from "../components/Footer";
 
 const brushFont = Caveat_Brush({ weight: '400', subsets: ['latin'] });
@@ -444,6 +445,9 @@ export default function LandingPage() {
           </Link>
         </Reveal>
       </section>
+
+      {/* 🚀 ADDED NEWSLETTER RIGHT HERE ABOVE THE FOOTER 🚀 */}
+      <Newsletter />
 
       <Footer />
     </main>

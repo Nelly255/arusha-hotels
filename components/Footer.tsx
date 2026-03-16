@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useState } from "react";
 import { supabase } from "../lib/supabase";
-import Newsletter from "./Newsletter"; // 🚀 IMPORTED THE NEWSLETTER HERE 🚀
 
 export default function Footer() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -44,9 +43,6 @@ export default function Footer() {
 
   return (
     <>
-      {/* 🚀 THE VIP NEWSLETTER CAPTURE IS NOW GLOBAL 🚀 */}
-      <Newsletter />
-
       <footer className="relative border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#050505] pt-16 pb-8 overflow-hidden z-10 transition-colors duration-500">
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[40rem] h-[20rem] bg-blue-500/5 dark:bg-blue-600/10 blur-[100px] rounded-t-full pointer-events-none transition-colors duration-500"></div>
 
@@ -102,7 +98,6 @@ export default function Footer() {
               <p className="text-gray-600 dark:text-white/50 text-sm mb-6 transition-colors duration-500">
                 Are you a hotel owner in Arusha? Get listed on our platform and reach thousands of international tourists.
               </p>
-              {/* 🚀 UPGRADED: Premium architectural shadow and refined border 🚀 */}
               <button 
                 onClick={() => setIsModalOpen(true)}
                 className="inline-block bg-white dark:bg-white/10 hover:bg-gray-50 dark:hover:bg-white/20 border border-gray-200/80 dark:border-white/10 text-gray-900 dark:text-white px-6 py-3 rounded-xl text-sm font-bold transition-all shadow-[0_4px_14px_rgba(0,0,0,0.03)] dark:shadow-lg active:scale-95"

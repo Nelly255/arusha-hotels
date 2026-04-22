@@ -16,9 +16,19 @@ export const viewport: Viewport = {
 
 // 🚀 UPGRADED PREMIUM SEO METADATA 🚀
 export const metadata: Metadata = {
-  title: 'Arusha Hotels | The Premier Safari & Luxury Accommodation Directory',
-  description: 'Discover the best hotels, lodges, and safari camps in Arusha, Tanzania. Compare top-rated accommodations, view real-time weather, and book your perfect stay.',
-  keywords: ["Arusha hotels", "Tanzania safari lodges", "where to stay in Arusha", "Serengeti basecamp", "luxury hotels Arusha"],
+  // CRITICAL: Required for sitemap and OpenGraph image resolution
+  metadataBase: new URL('https://arushahotels.com'), 
+  
+  title: {
+    default: 'Arusha Hotels | The Premier Safari & Luxury Accommodation Directory',
+    template: '%s | Arusha Hotels', // This automatically makes subpages look clean (e.g., "Directory | Arusha Hotels")
+  },
+  description: 'Discover the best hotels, lodges, and safari camps across Arusha, Serengeti, Ngorongoro, and Tarangire. Compare top-rated accommodations and book your perfect Tanzanian stay.',
+  keywords: [
+    "Arusha hotels", "Tanzania safari lodges", "where to stay in Arusha", 
+    "Serengeti luxury camps", "Ngorongoro crater hotels", "Tarangire basecamps", 
+    "luxury hotels Arusha", "Lake Manyara lodges"
+  ],
   
   // --- THIS ADDS YOUR LOGO TO THE BROWSER TAB ---
   icons: {
@@ -28,7 +38,7 @@ export const metadata: Metadata = {
 
   openGraph: {
     title: 'Arusha Hotels | The Premier Safari & Luxury Accommodation Directory',
-    description: 'Discover the best hotels, lodges, and safari camps in Arusha, Tanzania. Compare top-rated accommodations and book your perfect stay.',
+    description: 'Discover the best hotels, lodges, and safari camps across Northern Tanzania. Compare top-rated accommodations and book your perfect stay.',
     url: 'https://arushahotels.com', 
     siteName: 'Arusha Hotels',
     images: [
@@ -45,8 +55,19 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Arusha Hotels | The Premier Safari & Luxury Accommodation Directory',
-    description: 'Discover the best hotels, lodges, and safari camps in Arusha, Tanzania.',
+    description: 'Discover the best hotels, lodges, and safari camps across Northern Tanzania.',
     images: ['https://images.unsplash.com/photo-1517826500585-e1104eece292?q=80&w=1200&auto=format&fit=crop'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 };
 

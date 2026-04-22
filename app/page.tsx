@@ -17,12 +17,13 @@ const HERO_IMAGES = [
   "/hero/5.jpg", "/hero/6.webp", "/hero/7.avif", "/hero/8.jpg", "/hero/citya.jpg", "/hero/masai.jpg", "/hero/p5.jpg", "/hero/9.jpg"
 ];
 
+// 🚀 PATCHED: SEO-Friendly Links matching your new local strategy 🚀
 const VIBES = [
-  { id: 1, title: "Safari Basecamps", desc: "Start your wild journey", image: "/safari.avif", keyword: "Safari" },
-  { id: 2, title: "Luxury Spa Retreats", desc: "Unwind & recharge", image: "/spa.jpg", keyword: "Spa" },
-  { id: 3, title: "Mount Meru Views", desc: "Wake up to the peak", image: "/view.avif", keyword: "Mount Meru" },
-  { id: 4, title: "City Convenience", desc: "Heart of Arusha", image: "/city.jpg", keyword: "City" },
-  { id: 5, title: "Boutique Hideaways", desc: "Private & exclusive", image: "/Bou.avif", keyword: "Boutique" },
+  { id: 1, title: "Safari Basecamps", desc: "Start your wild journey", image: "/safari.avif", href: "/safari-lodges-arusha" },
+  { id: 2, title: "Luxury Spa Retreats", desc: "Unwind & recharge", image: "/spa.jpg", href: "/luxury-hotels-arusha" },
+  { id: 3, title: "Mount Meru Views", desc: "Wake up to the peak", image: "/view.avif", href: "/hotels-near-mount-meru" },
+  { id: 4, title: "City Convenience", desc: "Heart of Arusha", image: "/city.jpg", href: "/hotels-in-arusha" },
+  { id: 5, title: "Boutique Hideaways", desc: "Private & exclusive", image: "/Bou.avif", href: "/boutique-hotels-arusha" },
 ];
 
 // --- COMPONENTS ---
@@ -191,15 +192,25 @@ export default function LandingPage() {
               <span className="text-sm font-bold tracking-[0.2em] text-white uppercase">Current Arusha Vibe • {weather.temp}°C</span>
             </div>
           </Reveal>
+          
           <Reveal delay={100}>
-            <h2 className={`${brushFont.className} text-3xl md:text-5xl text-orange-400 tracking-wider mb-4 drop-shadow-lg`}>Karibu Tanzania</h2>
+            {/* 🔥 FIXED: Changed from H2 to a 'p' tag so we don't break hierarchy 🔥 */}
+            <p className={`${brushFont.className} text-3xl md:text-5xl text-orange-400 tracking-wider mb-4 drop-shadow-lg`}>
+              Karibu Tanzania
+            </p>
           </Reveal>
+          
           <Reveal delay={200}>
+            {/* 🔥 FIXED: H1 now includes exact keywords matching the layout.tsx Title 🔥 */}
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-6 drop-shadow-2xl text-white leading-[1.1]">
-              Uncover Arusha's <br/> 
+              <span className="block text-2xl md:text-3xl text-white/80 font-extrabold tracking-wide mb-2 uppercase drop-shadow-md">
+                Arusha Hotels & Safari Lodges
+              </span>
+              Uncover Tanzania's <br/> 
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">Finest Stays.</span>
             </h1>
           </Reveal>
+          
           <Reveal delay={300}>
             <p className="text-lg md:text-2xl text-gray-200 font-medium mb-10 max-w-3xl mx-auto leading-relaxed drop-shadow-md">
               The ultimate curated directory for luxury lodges, boutique hotels, and safari basecamps at the foot of Mount Meru.
@@ -242,7 +253,8 @@ export default function LandingPage() {
           <div className="flex overflow-x-auto gap-4 md:gap-6 pb-8 snap-x [&::-webkit-scrollbar]:hidden w-[calc(100%+2rem)] -mx-4 px-4 md:w-full md:mx-0 md:px-0">
             {VIBES.map((vibe, idx) => (
               <Reveal key={vibe.id} delay={idx * 100}>
-                <Link href={`/directory?search=${vibe.keyword}`}>
+                {/* 🚀 PATCHED: Linking straight to the SEO category page! 🚀 */}
+                <Link href={vibe.href}>
                   <div className="relative w-64 md:w-80 aspect-[4/5] rounded-[2rem] overflow-hidden group cursor-pointer snap-start flex-shrink-0 shadow-lg dark:shadow-2xl">
                     <img src={vibe.image} alt={vibe.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>

@@ -257,7 +257,7 @@ export default async function HotelDetailsPage({ params }: PageProps) {
               <div className="mt-3 px-2 pb-2">
                 <a 
                   /* 🔥 FIXED EXTERNAL LINK STRING 🔥 */
-                  href={`https://maps.google.com/maps?q=${mapQuery}`}
+                  href={`https://www.google.com/maps/search/?api=1&query=${mapQuery}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full text-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-bold text-sm py-3 transition-colors block"

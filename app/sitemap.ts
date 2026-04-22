@@ -1,36 +1,76 @@
 import { MetadataRoute } from 'next';
-import { supabase } from '../lib/supabase'; // Adjust this path if your lib folder is somewhere else!
+import { supabase } from '../lib/supabase'; 
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // 1. Fetch all hotel IDs from your database
-  const { data: hotels } = await supabase
-    .from('hotels')
-    .select('id');
+  const baseUrl = 'https://arushahotels.com';
 
-  // 2. Loop through them and create a specific SEO URL for every single hotel
+  // 1. Fetch hotel IDs dynamically
+  const { data: hotels } = await supabase.from('hotels').select('id');
+
   const hotelUrls: MetadataRoute.Sitemap = (hotels || []).map((hotel) => ({
-    url: `https://arushahotels.com/hotels/${hotel.id}`,
+    url: `${baseUrl}/hotels/${hotel.id}`, 
     lastModified: new Date(),
     changeFrequency: 'weekly',
-    priority: 0.8, // Tells Google these are highly important pages
+    priority: 0.8,
   }));
 
-  // 3. Define your core static pages
+  // 2. Static core pages
   const staticUrls: MetadataRoute.Sitemap = [
-    {
-      url: 'https://arushahotels.com',
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 1.0, // Homepage is the absolute #1 priority
-    },
-    {
-      url: 'https://arushahotels.com/favorites',
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.5,
-    },
+    { url: `${baseUrl}`, lastModified: new Date(), changeFrequency: 'daily', priority: 1.0 },
+    { url: `${baseUrl}/favorites`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${baseUrl}/about-us`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.4 },
+    { url: `${baseUrl}/contact`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.4 },
   ];
 
-  // 4. Combine them all and serve them to Google!
-  return [...staticUrls, ...hotelUrls];
+  // 3. Category pages (Programmatic SEO)
+  const categoryUrls: MetadataRoute.Sitemap = [
+    '/hotels-in-arusha',
+    '/boutique-hotels-arusha',
+    '/luxury-hotels-arusha',
+    '/safari-lodges-arusha',
+    '/luxury-lodges-serengeti',
+    '/camps-ngorongoro-crater',
+    '/tarangire-safari-lodges'
+  ].map((path) => ({
+    url: `${baseUrl}${path}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly',
+    priority: 0.9,
+  }));
+
+  // 4. Location pages
+  const locationUrls: MetadataRoute.Sitemap = [
+    '/hotels-in-njiro-arusha',
+    '/hotels-near-kilimanjaro-airport',
+    '/hotels-near-lake-manyara',
+    '/lodges-central-serengeti',
+    '/lodges-karatu-tanzania'
+  ].map((path) => ({
+    url: `${baseUrl}${path}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly',
+    priority: 0.85,
+  }));
+
+  // 5. Experience-based pages
+  const experienceUrls: MetadataRoute.Sitemap = [
+    '/romantic-hotels-arusha',
+    '/family-friendly-safari-lodges',
+    '/honeymoon-safari-arusha',
+    '/eco-lodges-arusha',
+  ].map((path) => ({
+    url: `${baseUrl}${path}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly',
+    priority: 0.85,
+  }));
+
+  // 6. Combine everything (NO BLOG!)
+  return [
+    ...staticUrls,
+    ...categoryUrls,
+    ...locationUrls,
+    ...experienceUrls,
+    ...hotelUrls,
+  ];
 }

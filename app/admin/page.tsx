@@ -47,10 +47,12 @@ export default function AdminPage() {
   const [galleryPreviews, setGalleryPreviews] = useState<string[]>([]);
   const [existingGallery, setExistingGallery] = useState<string[]>([]); 
 
+  // 🚀 UPGRADED: Added price_bb, price_hb, price_fb to state 🚀
   const [formData, setFormData] = useState({
     name: "", location: "", pricePerNight: "", rating: "", description: "", 
     isHidden: false, is_featured: false, amenities: [] as string[], officialUrl: "",
-    phone_number: "", instagram_handle: ""
+    phone_number: "", instagram_handle: "",
+    price_bb: "", price_hb: "", price_fb: ""
   });
 
   const logoutTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -301,10 +303,14 @@ export default function AdminPage() {
         finalGalleryUrls.push(publicUrl);
       }
 
+      // 🚀 UPGRADED: Format DB payload with new board rates 🚀
       const payload = {
         ...formData,
         pricePerNight: parseInt(formData.pricePerNight),
         rating: parseFloat(formData.rating),
+        price_bb: formData.price_bb ? Number(formData.price_bb) : null,
+        price_hb: formData.price_hb ? Number(formData.price_hb) : null,
+        price_fb: formData.price_fb ? Number(formData.price_fb) : null,
         image_gallery: finalGalleryUrls,
         ...(finalImageUrl ? { imageUrl: finalImageUrl } : {})
       };
@@ -334,7 +340,9 @@ export default function AdminPage() {
 
   const resetForm = () => {
     setEditId(null); setImageFile(null); setPreviewUrl(null); setGalleryFiles([]); setGalleryPreviews([]); setExistingGallery([]); setStatus(null);
-    setFormData({ name: "", location: "", pricePerNight: "", rating: "", description: "", isHidden: false, is_featured: false, amenities: [], officialUrl: "", phone_number: "", instagram_handle: "" });
+    setFormData({ 
+      name: "", location: "", pricePerNight: "", rating: "", description: "", isHidden: false, is_featured: false, amenities: [], officialUrl: "", phone_number: "", instagram_handle: "", price_bb: "", price_hb: "", price_fb: "" 
+    });
   };
 
   const openAddForm = () => {
@@ -347,7 +355,11 @@ export default function AdminPage() {
     setFormData({
       name: hotel.name, location: hotel.location, pricePerNight: hotel.pricePerNight.toString(), rating: hotel.rating.toString(), 
       description: hotel.description, isHidden: hotel.isHidden || false, is_featured: hotel.is_featured || false,
-      amenities: hotel.amenities || [], officialUrl: hotel.officialUrl || "", phone_number: hotel.phone_number || "", instagram_handle: hotel.instagram_handle || ""
+      amenities: hotel.amenities || [], officialUrl: hotel.officialUrl || "", phone_number: hotel.phone_number || "", instagram_handle: hotel.instagram_handle || "",
+      // 🚀 UPGRADED: Load existing board rates 🚀
+      price_bb: hotel.price_bb || "",
+      price_hb: hotel.price_hb || "",
+      price_fb: hotel.price_fb || ""
     });
     setPreviewUrl(hotel.imageUrl);
     setExistingGallery(hotel.image_gallery || []); 
@@ -540,7 +552,6 @@ export default function AdminPage() {
                       <label className="block text-xs font-bold text-gray-600 dark:text-white/50 mb-3 uppercase tracking-widest">Attraction Title</label>
                       <input required placeholder="e.g. Arusha National Park" className="w-full p-4 rounded-2xl bg-transparent dark:bg-white/5 border border-gray-300 dark:border-white/10 focus:border-orange-500 outline-none font-bold text-gray-900 dark:text-white" value={exploreForm.title} onChange={e => setExploreForm({...exploreForm, title: e.target.value})} />
                     </div>
-                    {/* 🚀 NEW LOCATION INPUT 🚀 */}
                     <div>
                       <label className="block text-xs font-bold text-gray-600 dark:text-white/50 mb-3 uppercase tracking-widest">Location (Optional)</label>
                       <input placeholder="e.g. 45 mins from Arusha Center" className="w-full p-4 rounded-2xl bg-transparent dark:bg-white/5 border border-gray-300 dark:border-white/10 focus:border-orange-500 outline-none font-bold text-gray-900 dark:text-white" value={exploreForm.location} onChange={e => setExploreForm({...exploreForm, location: e.target.value})} />
@@ -602,8 +613,6 @@ export default function AdminPage() {
             )}
           </div>
         )}
-
-        {/* REST OF THE VIEWS REMAIN UNCHANGED DOWN HERE */}
         
         {currentView === 'list' && (
           <div className="flex flex-col gap-8 animate-in fade-in duration-500 max-w-[1600px] mx-auto">
@@ -700,10 +709,26 @@ export default function AdminPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div><label className="block text-xs font-bold text-gray-600 dark:text-white/50 mb-3 uppercase tracking-widest">Hotel Name</label><input required placeholder="e.g. Gran Melia Arusha" className="w-full p-4 rounded-2xl bg-transparent dark:bg-white/5 border border-gray-300 dark:border-white/10 focus:border-blue-500 outline-none font-bold text-gray-900 dark:text-white" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} /></div>
                   <div><label className="block text-xs font-bold text-gray-600 dark:text-white/50 mb-3 uppercase tracking-widest">Location</label><input required placeholder="e.g. Simeon Road, Arusha" className="w-full p-4 rounded-2xl bg-transparent dark:bg-white/5 border border-gray-300 dark:border-white/10 focus:border-blue-500 outline-none font-bold text-gray-900 dark:text-white" value={formData.location} onChange={e => setFormData({...formData, location: e.target.value})} /></div>
-                  <div><label className="block text-xs font-bold text-gray-600 dark:text-white/50 mb-3 uppercase tracking-widest">Price ($) per night</label><input required type="number" placeholder="250" className="w-full p-4 rounded-2xl bg-transparent dark:bg-white/5 border border-gray-300 dark:border-white/10 focus:border-blue-500 outline-none font-bold text-gray-900 dark:text-white" value={formData.pricePerNight} onChange={e => setFormData({...formData, pricePerNight: e.target.value})} /></div>
+                  <div><label className="block text-xs font-bold text-gray-600 dark:text-white/50 mb-3 uppercase tracking-widest">Base Price ($) per night</label><input required type="number" placeholder="250" className="w-full p-4 rounded-2xl bg-transparent dark:bg-white/5 border border-gray-300 dark:border-white/10 focus:border-blue-500 outline-none font-bold text-gray-900 dark:text-white" value={formData.pricePerNight} onChange={e => setFormData({...formData, pricePerNight: e.target.value})} /></div>
                   <div><label className="block text-xs font-bold text-gray-600 dark:text-white/50 mb-3 uppercase tracking-widest">Initial Rating (1-5)</label><input required type="number" step="0.1" max="5" placeholder="4.8" className="w-full p-4 rounded-2xl bg-transparent dark:bg-white/5 border border-gray-300 dark:border-white/10 focus:border-blue-500 outline-none font-bold text-gray-900 dark:text-white" value={formData.rating} onChange={e => setFormData({...formData, rating: e.target.value})} /></div>
                   <div><label className="block text-xs font-bold text-gray-600 dark:text-white/50 mb-3 uppercase tracking-widest">Phone Number</label><input placeholder="+255 700 000 000" className="w-full p-4 rounded-2xl bg-transparent dark:bg-white/5 border border-gray-300 dark:border-white/10 focus:border-blue-500 outline-none font-bold text-gray-900 dark:text-white" value={formData.phone_number} onChange={e => setFormData({...formData, phone_number: e.target.value})} /></div>
                   <div><label className="block text-xs font-bold text-gray-600 dark:text-white/50 mb-3 uppercase tracking-widest">Instagram Handle</label><input placeholder="@hotel_arusha" className="w-full p-4 rounded-2xl bg-transparent dark:bg-white/5 border border-gray-300 dark:border-white/10 focus:border-blue-500 outline-none font-bold text-gray-900 dark:text-white" value={formData.instagram_handle} onChange={e => setFormData({...formData, instagram_handle: e.target.value})} /></div>
+                </div>
+
+                {/* 🚀 NEW: BOARD RATES SECTIONS 🚀 */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-500/20 p-6 rounded-3xl">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-600 dark:text-white/50 mb-3 uppercase tracking-widest">Bed & Breakfast (USD)</label>
+                    <input type="number" placeholder="e.g. 90" className="w-full p-4 rounded-2xl bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-white/10 focus:border-blue-500 outline-none font-bold text-gray-900 dark:text-white shadow-sm" value={formData.price_bb} onChange={e => setFormData({...formData, price_bb: e.target.value})} />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-600 dark:text-white/50 mb-3 uppercase tracking-widest">Half Board (USD)</label>
+                    <input type="number" placeholder="e.g. 150" className="w-full p-4 rounded-2xl bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-white/10 focus:border-blue-500 outline-none font-bold text-gray-900 dark:text-white shadow-sm" value={formData.price_hb} onChange={e => setFormData({...formData, price_hb: e.target.value})} />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-600 dark:text-white/50 mb-3 uppercase tracking-widest">Full Board (USD)</label>
+                    <input type="number" placeholder="e.g. 200" className="w-full p-4 rounded-2xl bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-white/10 focus:border-blue-500 outline-none font-bold text-gray-900 dark:text-white shadow-sm" value={formData.price_fb} onChange={e => setFormData({...formData, price_fb: e.target.value})} />
+                  </div>
                 </div>
 
                 <div><label className="block text-xs font-bold text-gray-600 dark:text-white/50 mb-3 uppercase tracking-widest">Official Website Link</label><input placeholder="https://..." className="w-full p-4 rounded-2xl bg-transparent dark:bg-white/5 border border-gray-300 dark:border-white/10 focus:border-blue-500 outline-none font-bold text-gray-900 dark:text-white" value={formData.officialUrl} onChange={e => setFormData({...formData, officialUrl: e.target.value})} /></div>

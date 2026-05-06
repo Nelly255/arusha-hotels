@@ -4,6 +4,9 @@ import { useState } from "react";
 
 interface Props {
   price: string | number;
+  price_bb?: string | number;
+  price_hb?: string | number;
+  price_fb?: string | number;
   officialUrl?: string;
   booking_url?: string;
 }
@@ -22,7 +25,7 @@ const parseDate = (dateStr: string) => {
   return new Date(Number(y), Number(m) - 1, Number(d));
 };
 
-export default function InteractiveBookingCard({ price, officialUrl, booking_url }: Props) {
+export default function InteractiveBookingCard({ price, price_bb, price_hb, price_fb, officialUrl, booking_url }: Props) {
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
 
@@ -30,6 +33,19 @@ export default function InteractiveBookingCard({ price, officialUrl, booking_url
   const [showCalendar, setShowCalendar] = useState(false);
   const [calendarView, setCalendarView] = useState(new Date());
   const [selectionStep, setSelectionStep] = useState<"in" | "out">("in");
+
+  // 🚀 NEW: Currency State and Converter 🚀
+  const [currency, setCurrency] = useState<"USD" | "TZS">("USD");
+  const exchangeRate = 2600; // Adjust this if the live rate changes
+
+  const formatPrice = (amount: string | number) => {
+    const num = Number(amount);
+    if (isNaN(num)) return amount; // Fallback just in case text is passed
+    if (currency === "USD") return `$${num}`;
+    return `TSh ${(num * exchangeRate).toLocaleString()}`;
+  };
+
+  const hasBoardRates = price_bb || price_hb || price_fb;
 
   const handleBookingCom = () => {
     if (!booking_url) return;
@@ -137,18 +153,46 @@ export default function InteractiveBookingCard({ price, officialUrl, booking_url
   return (
     <div className={`bg-white/70 dark:bg-[#0a0a0a]/50 backdrop-blur-3xl border border-white/60 dark:border-white/10 rounded-3xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all flex flex-col gap-6 relative ${showCalendar ? "z-[100]" : "z-10"}`}>
       
-      {/* Price Header */}
-      <div className="flex justify-between items-end border-b border-gray-300/50 dark:border-white/10 pb-4">
-        <div>
-          <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-[0.2em] mb-1">
-            Starting from
+      {/* 🚀 UPGRADED: Dynamic Price Header & Currency Toggle & Disclaimer 🚀 */}
+      <div className="flex justify-between items-start border-b border-gray-300/50 dark:border-white/10 pb-4">
+        <div className="flex flex-col">
+          <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-[0.2em] mb-0.5">
+            {hasBoardRates ? "Rates Breakdown" : "Starting from"}
           </p>
-          <div className="flex items-baseline gap-1">
-            <span className="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">
-              ${price}
-            </span>
-            <span className="text-gray-600 dark:text-gray-400 font-medium text-sm">/night</span>
-          </div>
+          
+          {/* 🔥 NEW DISCLAIMER 🔥 */}
+          <p className="text-[9px] text-gray-400 dark:text-gray-500 font-semibold tracking-wider uppercase mb-2">
+            *Standard Double Occupancy • Seasonal Rates May Apply
+          </p>
+
+          {!hasBoardRates && (
+            <div className="flex items-baseline gap-1 mt-1">
+              <span className="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+                {formatPrice(price)}
+              </span>
+              <span className="text-gray-600 dark:text-gray-400 font-medium text-sm">/night</span>
+            </div>
+          )}
+        </div>
+
+        {/* Currency Toggle */}
+        <div className="flex bg-gray-200/50 dark:bg-black/40 backdrop-blur-md rounded-full p-1 border border-gray-300/50 dark:border-white/5 shadow-inner shrink-0">
+          <button
+            onClick={() => setCurrency("USD")}
+            className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${
+              currency === "USD" ? "bg-white dark:bg-white/10 text-gray-900 dark:text-white shadow-sm" : "text-gray-500 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+            }`}
+          >
+            USD
+          </button>
+          <button
+            onClick={() => setCurrency("TZS")}
+            className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${
+              currency === "TZS" ? "bg-white dark:bg-white/10 text-gray-900 dark:text-white shadow-sm" : "text-gray-500 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+            }`}
+          >
+            TZS
+          </button>
         </div>
       </div>
 
@@ -218,6 +262,36 @@ export default function InteractiveBookingCard({ price, officialUrl, booking_url
           </div>
         )}
       </div>
+
+      {/* 🚀 NEW: Detailed Board Rates Section 🚀 */}
+      {hasBoardRates && (
+        <div className="flex flex-col gap-3 py-3 border-t border-b border-gray-200/50 dark:border-white/10 relative z-10 -mx-2 px-2">
+          {price_bb && (
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300 font-medium text-sm">
+                <span className="text-lg">☕</span> Bed & Breakfast
+              </div>
+              <span className="font-bold text-gray-900 dark:text-white">{formatPrice(price_bb)}</span>
+            </div>
+          )}
+          {price_hb && (
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300 font-medium text-sm">
+                <span className="text-lg">🍽️</span> Half Board
+              </div>
+              <span className="font-bold text-gray-900 dark:text-white">{formatPrice(price_hb)}</span>
+            </div>
+          )}
+          {price_fb && (
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300 font-medium text-sm">
+                <span className="text-lg">🍷</span> Full Board
+              </div>
+              <span className="font-bold text-gray-900 dark:text-white">{formatPrice(price_fb)}</span>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Buttons Section */}
       <div className="flex flex-col gap-3 mt-2">

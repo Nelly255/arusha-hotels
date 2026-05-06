@@ -186,8 +186,15 @@ export default async function HotelDetailsPage({ params }: PageProps) {
               </div>
             </div>
             
-            {/* The upgraded dual-button InteractiveBookingCard! */}
-            <InteractiveBookingCard price={hotel.pricePerNight} officialUrl={hotel.officialUrl} booking_url={hotel.booking_url} />
+            {/* 🚀 UPGRADED: Passing the new board rates down to the card 🚀 */}
+            <InteractiveBookingCard 
+              price={hotel.pricePerNight} 
+              price_bb={hotel.price_bb}
+              price_hb={hotel.price_hb}
+              price_fb={hotel.price_fb}
+              officialUrl={hotel.officialUrl} 
+              booking_url={hotel.booking_url} 
+            />
 
             {(hotel.phone_number || hotel.instagram_handle) && (
               <div className="bg-white/70 dark:bg-[#0a0a0a]/50 backdrop-blur-3xl border border-white/60 dark:border-white/10 rounded-3xl p-8 shadow-[0_8px_32px_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all">
@@ -257,7 +264,7 @@ export default async function HotelDetailsPage({ params }: PageProps) {
               <div className="mt-3 px-2 pb-2">
                 <a 
                   /* 🔥 FIXED EXTERNAL LINK STRING 🔥 */
-                  href={`https://www.google.com/maps/search/?api=1&query=${mapQuery}`}
+                  href={`https://maps.google.com/maps?q=${mapQuery}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full text-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-bold text-sm py-3 transition-colors block"

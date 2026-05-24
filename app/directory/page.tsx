@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import Image from "next/image"; 
 import HotelCard from "../../components/HotelCard";
 import { supabase } from "../../lib/supabase"; 
 import { HotelProps } from "../../data/hotels"; 
@@ -17,7 +18,6 @@ const brushFont = Caveat_Brush({
 const QUICK_AMENITIES = ["🏊 Swimming Pool", "📶 Free WiFi", "💆 Spa & Wellness", "🍽️ Restaurant"];
 const ITEMS_PER_PAGE = 15;
 
-// --- 🚀 NEW: Inner Component to handle the URL Search Params safely 🚀 ---
 function DirectoryContent() {
   const searchParams = useSearchParams();
   const initialSearch = searchParams.get("search") || "";
@@ -41,18 +41,56 @@ function DirectoryContent() {
   
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // 🚀 NEW: Update search query if the URL changes while already on the page
+  const [isRestored, setIsRestored] = useState(false);
+
   useEffect(() => {
-    const currentSearch = searchParams.get("search");
-    if (currentSearch) {
-      setSearchQuery(currentSearch);
+    const savedState = sessionStorage.getItem("arusha_directory_state");
+    let parsed: any = {};
+    
+    if (savedState) {
+      try {
+        parsed = JSON.parse(savedState);
+        if (parsed.searchQuery !== undefined) setSearchQuery(parsed.searchQuery);
+        if (parsed.minPrice !== undefined) setMinPrice(parsed.minPrice);
+        if (parsed.maxPrice !== undefined) setMaxPrice(parsed.maxPrice);
+        if (parsed.minRating !== undefined) setMinRating(parsed.minRating);
+        if (parsed.selectedAmenities !== undefined) setSelectedAmenities(parsed.selectedAmenities);
+        if (parsed.currentPage !== undefined) setCurrentPage(parsed.currentPage);
+        if (parsed.viewMode !== undefined) setViewMode(parsed.viewMode);
+      } catch (e) {
+        console.error("Failed to parse saved state", e);
+      }
     }
+
+    const currentSearch = searchParams.get("search");
+    if (currentSearch && currentSearch !== parsed.searchQuery) {
+      setSearchQuery(currentSearch);
+      setCurrentPage(1);
+    }
+    
+    setIsRestored(true); 
   }, [searchParams]);
 
   useEffect(() => {
+    if (!isRestored) return; 
+    
+    const stateToSave = {
+      searchQuery, minPrice, maxPrice, minRating, selectedAmenities, currentPage, viewMode
+    };
+    sessionStorage.setItem("arusha_directory_state", JSON.stringify(stateToSave));
+  }, [searchQuery, minPrice, maxPrice, minRating, selectedAmenities, currentPage, viewMode, isRestored]);
+
+  useEffect(() => {
     async function fetchHotels() {
-      try {
+      const cachedHotels = sessionStorage.getItem("arusha_hotels_cache");
+      if (cachedHotels) {
+        setHotels(JSON.parse(cachedHotels));
+        setLoading(false);
+      } else {
         setLoading(true);
+      }
+
+      try {
         const { data, error } = await supabase
           .from('hotels')
           .select('*')
@@ -67,6 +105,7 @@ function DirectoryContent() {
             return a.name.localeCompare(b.name);
           });
           setHotels(sortedData);
+          sessionStorage.setItem("arusha_hotels_cache", JSON.stringify(sortedData)); 
         }
       } catch (error) {
         console.error("Error:", error);
@@ -77,9 +116,10 @@ function DirectoryContent() {
     fetchHotels();
   }, []);
 
-  useEffect(() => {
+  const handleSearchChange = (val: string) => {
+    setSearchQuery(val);
     setCurrentPage(1);
-  }, [searchQuery, minPrice, maxPrice, minRating, selectedAmenities]);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -112,6 +152,7 @@ function DirectoryContent() {
     setSelectedAmenities(prev => 
       prev.includes(amenity) ? prev.filter(a => a !== amenity) : [...prev, amenity]
     );
+    setCurrentPage(1);
   };
 
   const toggleMinPrice = (price: number) => {
@@ -121,6 +162,7 @@ function DirectoryContent() {
       setMinPrice(price);
       setMaxPrice(null); 
     }
+    setCurrentPage(1);
   };
 
   const toggleMaxPrice = (price: number) => {
@@ -130,10 +172,12 @@ function DirectoryContent() {
       setMaxPrice(price);
       setMinPrice(null); 
     }
+    setCurrentPage(1);
   };
 
   const toggleRating = (rating: number) => {
     setMinRating(prev => prev === rating ? null : rating);
+    setCurrentPage(1);
   };
 
   const clearFilters = () => {
@@ -142,6 +186,7 @@ function DirectoryContent() {
     setMinRating(null);
     setSelectedAmenities([]);
     setSearchQuery("");
+    setCurrentPage(1);
   };
 
   const hasActiveFilters = minPrice !== null || maxPrice !== null || minRating !== null || selectedAmenities.length > 0 || searchQuery !== "";
@@ -167,25 +212,50 @@ function DirectoryContent() {
     currentPage * ITEMS_PER_PAGE
   );
 
+  const baseFilterClass = "flex-shrink-0 px-5 md:px-6 py-2.5 rounded-full text-xs font-bold transition-all duration-300 backdrop-blur-xl bg-white/70 dark:bg-black/20 border border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-300 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:bg-white dark:hover:bg-white/10 hover:border-white/60 dark:hover:border-white/20 hover:text-gray-950 dark:hover:text-white hover:scale-105 active:scale-95";
+  const activeFilterClass = "flex-shrink-0 px-5 md:px-6 py-2.5 rounded-full text-xs font-black transition-all duration-300 backdrop-blur-xl bg-orange-500/90 text-white border-2 border-orange-400 shadow-[0_4px_20px_rgba(234,88,12,0.3)] hover:scale-105 active:scale-95";
+
   const FilterButtons = () => (
     <>
-      <button onClick={() => toggleMinPrice(200)} className={`flex-shrink-0 px-5 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-bold transition-all border ${minPrice === 200 ? 'bg-gray-900 text-white border-gray-900 shadow-md dark:bg-white dark:text-gray-900 dark:border-white' : 'bg-gray-100 dark:bg-white/5 border-gray-200/60 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white'}`}>Above $200</button>
+      <button 
+        onClick={() => toggleMinPrice(200)} 
+        className={minPrice === 200 ? activeFilterClass : baseFilterClass}
+      >
+        Above $200
+      </button>
       <div className="w-1.5 h-1.5 bg-gray-300 dark:bg-white/20 mx-1 md:mx-2 flex-shrink-0 rounded-full"></div>
-      <button onClick={() => toggleMaxPrice(250)} className={`flex-shrink-0 px-5 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-bold transition-all border ${maxPrice === 250 ? 'bg-gray-900 text-white border-gray-900 shadow-md dark:bg-white dark:text-gray-900 dark:border-white' : 'bg-gray-100 dark:bg-white/5 border-gray-200/60 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white'}`}>Under $250</button>
+      
+      <button 
+        onClick={() => toggleMaxPrice(200)} 
+        className={maxPrice === 200 ? activeFilterClass : baseFilterClass}
+      >
+        Under $200
+      </button>
       <div className="w-1.5 h-1.5 bg-gray-300 dark:bg-white/20 mx-1 md:mx-2 flex-shrink-0 rounded-full"></div>
-      <button onClick={() => toggleRating(4)} className={`flex-shrink-0 px-5 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-bold transition-all border ${minRating === 4 ? 'bg-gray-900 text-white border-gray-900 shadow-md dark:bg-white dark:text-gray-900 dark:border-white' : 'bg-gray-100 dark:bg-white/5 border-gray-200/60 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white'}`}>⭐ 4+ Stars</button>
+      
+      <button 
+        onClick={() => toggleRating(4)} 
+        className={minRating === 4 ? activeFilterClass : baseFilterClass}
+      >
+        ⭐ 4+ Stars
+      </button>
       
       {QUICK_AMENITIES.map((amenity) => (
         <div key={amenity} className="flex items-center flex-shrink-0">
           <div className="w-1.5 h-1.5 bg-gray-300 dark:bg-white/20 mx-1 md:mx-2 flex-shrink-0 rounded-full"></div>
-          <button onClick={() => toggleAmenity(amenity)} className={`flex-shrink-0 px-5 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-bold transition-all border ${selectedAmenities.includes(amenity) ? 'bg-gray-900 text-white border-gray-900 shadow-md dark:bg-white dark:text-gray-900 dark:border-white' : 'bg-gray-100 dark:bg-white/5 border-gray-200/60 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white'}`}>
+          <button 
+            onClick={() => toggleAmenity(amenity)} 
+            className={selectedAmenities.includes(amenity) ? activeFilterClass : baseFilterClass}
+          >
             {amenity}
           </button>
         </div>
       ))}
 
       {hasActiveFilters && (
-        <button onClick={clearFilters} className="flex-shrink-0 px-4 py-2 md:py-2.5 rounded-full text-[10px] font-black uppercase tracking-wider text-red-600 border border-red-200 dark:text-red-400 dark:border-red-900/50 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all ml-2 md:ml-4">Clear ✕</button>
+        <button onClick={clearFilters} className="flex-shrink-0 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-wider text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/50 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all ml-2 md:ml-4">
+          Clear All ✕
+        </button>
       )}
     </>
   );
@@ -197,35 +267,37 @@ function DirectoryContent() {
         <div className="fixed top-0 left-[10%] -translate-x-1/2 -translate-y-1/2 w-[40rem] h-[40rem] bg-blue-400/20 dark:bg-blue-600/10 blur-[120px] rounded-full pointer-events-none transition-colors duration-500"></div>
         <div className="fixed top-0 right-[10%] translate-x-1/2 -translate-y-1/2 w-[40rem] h-[40rem] bg-purple-400/20 dark:bg-purple-600/10 blur-[120px] rounded-full pointer-events-none transition-colors duration-500"></div>
 
-        {/* 🚀 UNIFIED FULL-WIDTH GLASS HEADER 🚀 */}
+        {/* 🚀 UPGRADED PREMIUM GLASSMORPHISM HEADER 🚀 */}
         <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
           isScrolled 
-            ? "bg-white/90 dark:bg-[#0a0a0a]/90 backdrop-blur-3xl border-b border-gray-200/60 dark:border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_30px_rgba(0,0,0,0.4)] pt-3 pb-3" 
+            ? "bg-white/70 dark:bg-[#050505]/70 backdrop-blur-2xl border-b border-white/20 dark:border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.6)] pt-3 pb-3" 
             : "bg-transparent pt-6 pb-2 border-b border-transparent shadow-none"
         }`}>
           <div className="max-w-[1920px] mx-auto px-4 md:px-8">
             
             <div className="flex items-center w-full relative h-12 md:h-14">
               <div className="flex-1 flex justify-start">
-                <Link href="/" className="hover:opacity-80 transition-opacity drop-shadow-sm dark:drop-shadow-2xl">
-                   <svg viewBox="0 0 450 100" preserveAspectRatio="xMinYMid meet" className={`transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] w-auto ${isScrolled ? "h-10 md:h-12" : "h-12 md:h-16"}`}>
-                      <defs>
-                        <linearGradient id="sunset-dir" x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%" stopColor="#FBBF24" />
-                          <stop offset="100%" stopColor="#EA580C" />
-                        </linearGradient>
-                        <clipPath id="circle-clip-dir"><circle cx="45" cy="50" r="36" /></clipPath>
-                      </defs>
-                      <g transform="translate(0, 0)">
-                        <circle cx="45" cy="50" r="36" fill="url(#sunset-dir)" />
-                        <g clipPath="url(#circle-clip-dir)">
-                            <polygon points="5,80 35,35 75,80" fill="#ffffff" opacity="0.95"/>
-                            <polygon points="40,90 60,45 95,90" fill="#e5e7eb" opacity="0.7"/>
-                        </g>
-                      </g>
-                      <text x="105" y="54" fontWeight="900" fontSize="36" className="fill-gray-900 dark:fill-white" letterSpacing="-1">Arusha Hotels</text>
-                      <text x="108" y="78" fontSize="22" className={`${brushFont.className} fill-orange-600 dark:fill-orange-500 transition-opacity duration-300 ${isScrolled ? "opacity-0 sm:opacity-100" : "opacity-100"}`} letterSpacing="1">Rest Before The Adventure.</text>
-                    </svg>
+                {/* 🚀 FIXED MOBILE WRAP & TEXT SIZING 🚀 */}
+                <Link href="/" className="flex items-center gap-2 md:gap-3 hover:opacity-80 transition-opacity drop-shadow-sm dark:drop-shadow-2xl flex-shrink-0">
+                  <Image
+                    src="/icon.png"
+                    alt="Arusha Hotels Logo"
+                    width={60}
+                    height={60}
+                    className={`dark:invert transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] object-contain flex-shrink-0 ${
+                      isScrolled ? "w-8 h-8 md:w-11 md:h-11" : "w-10 h-10 md:w-14 md:h-14"
+                    }`}
+                  />
+                  <div className="flex flex-col justify-center">
+                    <span className="font-heading font-black text-xl md:text-3xl tracking-tighter text-gray-900 dark:text-white leading-none whitespace-nowrap">
+                      Arusha Hotels
+                    </span>
+                    <span className={`${brushFont.className} text-orange-600 dark:text-orange-500 text-[11px] sm:text-sm md:text-lg tracking-wide mt-0.5 transition-opacity duration-300 ${
+                      isScrolled ? "hidden sm:block" : "block"
+                    }`}>
+                      Rest Before The Adventure.
+                    </span>
+                  </div>
                 </Link>
               </div>
 
@@ -238,11 +310,11 @@ function DirectoryContent() {
                      type="text"
                      placeholder="Search Arusha..."
                      value={searchQuery}
-                     onChange={(e) => setSearchQuery(e.target.value)}
+                     onChange={(e) => handleSearchChange(e.target.value)}
                      className="w-full h-full bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-gray-900 dark:text-white rounded-full pl-12 pr-10 text-sm shadow-inner focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-white/20 transition-all font-medium placeholder-gray-500 hover:bg-gray-200 dark:hover:bg-white/10"
                    />
                    {searchQuery && (
-                     <button onClick={() => setSearchQuery("")} className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-red-500 transition-colors">
+                     <button onClick={() => handleSearchChange("")} className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-red-500 transition-colors">
                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
                      </button>
                    )}
@@ -256,7 +328,7 @@ function DirectoryContent() {
                    </button>
                 </div>
 
-                <div className={`hidden lg:flex items-center gap-8 transition-all duration-[600ms] ${isScrolled ? "" : "bg-white/50 dark:bg-black/20 backdrop-blur-md px-8 py-3 rounded-full border border-gray-200/50 dark:border-white/10 shadow-sm"}`}>
+                <div className="hidden lg:flex items-center gap-8">
                    <Link href="/directory" className="text-xs font-black uppercase tracking-widest text-gray-900 dark:text-white hover:opacity-70 transition-opacity">Directory</Link>
                    <Link href="/favorites" className="text-xs font-bold uppercase tracking-widest text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 transition-colors">Favorites</Link>
                 </div>
@@ -264,10 +336,10 @@ function DirectoryContent() {
             </div>
 
             <div className={`w-full transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] overflow-hidden ${showStickyHeader ? "max-h-24 opacity-100 mt-3 md:mt-4 pt-3 md:pt-4 border-t border-gray-200 dark:border-white/10" : "max-h-0 opacity-0 mt-0 pt-0 border-transparent"}`}>
-              <div className="flex items-center justify-between w-full">
+              <div className="flex items-center w-full">
                 
-                <div className="w-[calc(100%+2rem)] -mx-4 px-4 md:w-full md:mx-0 md:px-0 overflow-x-auto [&::-webkit-scrollbar]:hidden pb-1 md:pb-0">
-                  <div className="flex items-center gap-1.5 md:gap-2 flex-shrink-0 w-max pr-8 md:pr-0">
+                <div className="flex-1 w-[calc(100%+2rem)] -mx-4 px-4 md:w-full md:mx-0 md:px-0 overflow-x-auto [&::-webkit-scrollbar]:hidden pb-1 md:pb-0">
+                  <div className="flex items-center md:justify-center gap-1.5 md:gap-3 flex-shrink-0 min-w-full w-max pr-8 md:pr-0">
                      <FilterButtons />
                   </div>
                 </div>
@@ -290,7 +362,6 @@ function DirectoryContent() {
           </div>
         </header>
 
-        {/* --- MAIN CONTENT AREA --- */}
         <div className="w-full max-w-[1920px] mx-auto relative z-10 pt-[7rem] md:pt-[10rem] px-4 md:px-8">
           
           <div className="mb-8 md:mb-12 relative">
@@ -312,11 +383,11 @@ function DirectoryContent() {
                     type="text"
                     placeholder="Search Arusha's finest..."
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={(e) => handleSearchChange(e.target.value)}
                     className="w-full h-full bg-white/80 dark:bg-white/5 backdrop-blur-2xl border border-gray-200/80 dark:border-white/10 text-gray-900 dark:text-white rounded-full pl-14 md:pl-16 pr-6 text-base md:text-lg shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)] focus:outline-none focus:border-gray-400 dark:focus:border-white/30 transition-all font-medium placeholder-gray-400 hover:bg-white dark:hover:bg-white/10"
                   />
                   {searchQuery && (
-                    <button onClick={() => setSearchQuery("")} className="absolute inset-y-0 right-0 pr-5 flex items-center text-gray-400 hover:text-red-500 transition-colors z-10">
+                    <button onClick={() => handleSearchChange("")} className="absolute inset-y-0 right-0 pr-5 flex items-center text-gray-400 hover:text-red-500 transition-colors z-10">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
                   )}
@@ -335,7 +406,7 @@ function DirectoryContent() {
             </div>
 
             <div className="w-[calc(100%+2rem)] -mx-4 px-4 md:w-full md:mx-0 md:px-0 overflow-x-auto [&::-webkit-scrollbar]:hidden pb-2 md:pb-4">
-              <div className="flex items-center flex-shrink-0 w-max pr-8 md:pr-0 md:mx-auto">
+              <div className="flex items-center md:justify-center gap-1.5 md:gap-3 flex-shrink-0 min-w-full w-max pr-8 md:pr-0">
                  <FilterButtons />
               </div>
             </div>
@@ -415,7 +486,6 @@ function DirectoryContent() {
           )}
         </div>
 
-        {/* SCROLL-TO-TOP BUTTON */}
         <button
           onClick={scrollToTop}
           className={`fixed bottom-6 md:bottom-10 right-4 md:right-8 z-50 p-3.5 md:p-4 bg-white/90 dark:bg-[#1a1a1a]/90 backdrop-blur-xl border border-gray-200/80 dark:border-white/10 rounded-full shadow-lg text-gray-900 dark:text-white transition-all duration-500 transform hover:scale-110 active:scale-95 hover:bg-white dark:hover:bg-[#222] ${
@@ -432,7 +502,6 @@ function DirectoryContent() {
   );
 }
 
-// 🚀 Wrap the component in Suspense to make Next.js happy with URL params!
 export default function DirectoryPageWrapper() {
   return (
     <Suspense fallback={

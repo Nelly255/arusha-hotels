@@ -6,6 +6,7 @@ import ReviewSection from "../../../components/ReviewSection";
 import InteractiveBookingCard from "../../../components/InteractiveBookingCard"; 
 import FavoriteButton from "../../../components/FavoriteButton"; 
 import ImageGallery from "../../../components/ImageGallery"; 
+import BackButton from "../../../components/BackButton"; // 🚀 IMPORTED OUR NEW SMART BUTTON 🚀
 import { Metadata } from "next";
 
 interface PageProps {
@@ -127,14 +128,9 @@ export default async function HotelDetailsPage({ params }: PageProps) {
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80 dark:from-black/80 dark:via-black/60 dark:to-[#050505] transition-colors duration-700"></div>
       </div>
 
+      {/* 🚀 SWAPPED THE OLD LINK FOR OUR SMART BACK BUTTON 🚀 */}
       <div className="fixed top-8 left-4 md:left-8 z-50">
-        <Link
-          href="/directory"
-          className="group flex items-center gap-3 bg-white/10 hover:bg-white/20 dark:bg-black/30 dark:hover:bg-black/50 backdrop-blur-md border border-white/20 px-5 py-2.5 rounded-full transition-all duration-300 text-white shadow-lg hover:shadow-xl hover:scale-105"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 transition-transform group-hover:-translate-x-1"><path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
-          <span className="text-xs font-bold tracking-widest uppercase">Directory</span>
-        </Link>
+        <BackButton />
       </div>
 
       <div className="relative z-10 w-full max-w-[1300px] mx-auto px-4 md:px-8 pt-32 pb-32">
@@ -186,7 +182,6 @@ export default async function HotelDetailsPage({ params }: PageProps) {
               </div>
             </div>
             
-            {/* 🚀 UPGRADED: Passing the new board rates down to the card 🚀 */}
             <InteractiveBookingCard 
               price={hotel.pricePerNight} 
               price_bb={hotel.price_bb}

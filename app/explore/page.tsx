@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image"; // 🚀 Added Image import
 import Footer from "../../components/Footer";
 import { Caveat_Brush } from "next/font/google";
 import { supabase } from "../../lib/supabase"; 
@@ -44,7 +45,7 @@ interface Attraction {
 
 export default function ExplorePage() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [showTopBtn, setShowTopBtn] = useState(false); // New state for the button
+  const [showTopBtn, setShowTopBtn] = useState(false); 
   
   const [attractions, setAttractions] = useState<Attraction[]>([]);
   const [loading, setLoading] = useState(true);
@@ -52,7 +53,6 @@ export default function ExplorePage() {
   const [visibleCount, setVisibleCount] = useState(4); 
   const [temp, setTemp] = useState<number | null>(null);
 
-  // Magic scroll function
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -63,7 +63,7 @@ export default function ExplorePage() {
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 60);
-      setShowTopBtn(window.scrollY > 400); // Show button after 400px of scrolling
+      setShowTopBtn(window.scrollY > 400); 
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -107,30 +107,29 @@ export default function ExplorePage() {
   return (
     <main className="min-h-screen bg-[#FDFBF7] dark:bg-[#050505] text-[#2C241B] dark:text-[#E8E3D9] font-sans selection:bg-orange-500/30 overflow-x-hidden transition-colors duration-500">
       
-      {/* FLOATY GLASSY NAVIGATION */}
+      {/* 🚀 PREMIUM FLOATY GLASSY NAVIGATION 🚀 */}
       <div className={`fixed top-0 left-0 w-full z-50 flex justify-center transition-all duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${isScrolled ? "pt-4 px-4" : "pt-8 px-6 md:px-12"}`}>
         <nav className={`flex items-center justify-between w-full transition-all duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
             isScrolled 
-              ? "max-w-5xl bg-[#FDFBF7]/90 dark:bg-[#050505]/80 backdrop-blur-3xl border border-[#3E2723]/10 dark:border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.05)] dark:shadow-[0_20px_40px_rgba(0,0,0,0.8)] rounded-[2.5rem] px-6 py-3" 
+              ? "max-w-5xl bg-white/70 dark:bg-[#050505]/70 backdrop-blur-2xl border border-white/20 dark:border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.6)] rounded-[2.5rem] px-6 py-3" 
               : "max-w-[1920px] bg-transparent border-transparent rounded-none px-0 py-0"
           }`}
         >
-          <Link href="/" className="group flex items-center gap-3 md:gap-4 hover:opacity-90 transition-opacity">
-            <svg viewBox="0 0 100 100" preserveAspectRatio="xMinYMid meet" className={`transition-all duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] w-auto ${isScrolled ? "h-10 md:h-12" : "h-12 md:h-14"}`}>
-              <defs>
-                <linearGradient id="sunset-explore" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#D97706" /><stop offset="100%" stopColor="#9A3412" />
-                </linearGradient>
-                <clipPath id="circle-clip-explore"><circle cx="50" cy="50" r="50" /></clipPath>
-              </defs>
-              <circle cx="50" cy="50" r="50" fill="url(#sunset-explore)" />
-              <g clipPath="url(#circle-clip-explore)">
-                  <polygon points="10,90 50,30 90,90" fill="#ffffff" opacity="0.95"/>
-                  <polygon points="45,100 70,45 110,100" fill="#e5e7eb" opacity="0.7"/>
-              </g>
-            </svg>
+          {/* 🚀 BOLD & PREMIUM LOGO 🚀 */}
+          <Link href="/" className="group flex items-center gap-3 hover:opacity-90 transition-opacity">
+            <Image
+                src="/icon.png"
+                alt="Arusha Hotels Logo"
+                width={60}
+                height={60}
+                className={`transition-all duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] object-contain ${
+                  isScrolled 
+                    ? "brightness-0 dark:invert w-10 h-10 md:w-12 md:h-12" 
+                    : "brightness-0 dark:invert w-12 h-12 md:w-14 md:h-14 drop-shadow-md"
+                }`}
+             />
             <div className="flex flex-col justify-center">
-              <span className={`font-black tracking-tight text-[#574233] dark:text-[#E8E3D9] transition-all duration-[800ms] ${isScrolled ? "text-xl md:text-2xl" : "text-2xl md:text-3xl"} leading-none mb-1`}>
+              <span className={`font-heading font-black tracking-tighter transition-all duration-[800ms] text-gray-900 dark:text-[#E8E3D9] ${isScrolled ? "text-2xl md:text-3xl" : "text-3xl md:text-4xl"} leading-none mb-1`}>
                 Arusha Hotels
               </span>
               
@@ -166,13 +165,11 @@ export default function ExplorePage() {
         <div className="max-w-5xl mx-auto text-center relative z-10">
           <Reveal>
             <h2 className="text-sm md:text-base font-black uppercase tracking-[0.3em] text-[#8B5E34] mb-4">The Geneva of Africa</h2>
-            {/* Reduced heading sizes */}
             <h1 className={`${brushFont.className} text-5xl md:text-7xl lg:text-[8rem] tracking-tight mb-8 text-[#3E2723] dark:text-white leading-[0.9]`}>
               Discover the soul<br/> of Northern Tanzania.
             </h1>
           </Reveal>
           <Reveal delay={150}>
-            {/* Reduced from text-xl md:text-3xl to text-base md:text-xl */}
             <p className="text-base md:text-xl text-[#6D4C41] dark:text-gray-400 font-medium leading-relaxed mb-10 max-w-3xl mx-auto">
               Sitting directly exactly halfway between Cairo and Cape Town, Arusha is much more than just a staging point for safaris. It is a vibrant, green, and culturally rich city sitting in the shadow of Mount Meru.
             </p>
@@ -186,13 +183,11 @@ export default function ExplorePage() {
           
           <div className="w-full md:w-[55%] py-16 px-6 md:px-12 lg:px-24 flex flex-col justify-center relative z-20">
             <Reveal>
-              {/* Reduced heading from 5xl/7xl to 4xl/6xl */}
               <h2 className={`${brushFont.className} text-4xl md:text-6xl text-[#3E2723] dark:text-[#E8E3D9] tracking-wide mb-8 uppercase`}>
                 A clash of ancient and modern.
               </h2>
             </Reveal>
             <Reveal delay={100}>
-              {/* Reduced paragraphs from text-xl md:text-2xl to text-base md:text-lg */}
               <p className="text-base md:text-lg text-[#574233] dark:text-gray-400 leading-relaxed mb-6 font-medium">
                 Originally founded by German colonists in 1900 as a military garrison, Arusha has evolved into Tanzania’s diplomatic hub. Walk through the bustling central market and you'll see a beautiful collision of cultures: modern diplomats in suits crossing paths with Maasai warriors draped in traditional bright red shukas.
               </p>
@@ -230,7 +225,6 @@ export default function ExplorePage() {
         <Reveal>
           <div className="text-center mb-24">
             <h2 className="text-sm md:text-base font-black uppercase tracking-[0.3em] text-[#8B5E34] mb-4">Beyond the Serengeti</h2>
-            {/* Reduced heading from 6xl/8xl to 5xl/7xl */}
             <h3 className={`${brushFont.className} text-5xl md:text-7xl font-black text-[#3E2723] dark:text-white tracking-tight`}>Must-See Arusha.</h3>
           </div>
         </Reveal>
@@ -253,7 +247,6 @@ export default function ExplorePage() {
                 </div>
                 <div className="w-full md:w-1/2 flex flex-col justify-center px-2 md:px-12">
                   <Reveal delay={200}>
-                    {/* Tamed the giant numbers slightly */}
                     <div className={`${brushFont.className} text-[#D97706] text-7xl md:text-8xl opacity-20 mb-4 leading-none`}>
                       {(idx + 1).toString().padStart(2, '0')}
                     </div>
@@ -265,10 +258,8 @@ export default function ExplorePage() {
                       </div>
                     )}
                     
-                    {/* Reduced heading size */}
                     <h4 className={`${brushFont.className} text-4xl md:text-5xl font-black text-[#3E2723] dark:text-white mb-6 tracking-tight leading-none`}>{item.title}</h4>
                     
-                    {/* Reduced description font from text-xl/2xl to text-base/lg */}
                     <p className="text-base md:text-lg text-[#6D4C41] dark:text-gray-400 font-medium leading-relaxed">{item.description}</p>
                   </Reveal>
                 </div>
@@ -302,9 +293,7 @@ export default function ExplorePage() {
         
         <div className="w-full max-w-[1400px] relative z-10 bg-white/40 dark:bg-black/20 backdrop-blur-3xl border border-white/60 dark:border-white/5 rounded-[3rem] p-12 md:p-24 text-center shadow-[0_30px_80px_rgba(0,0,0,0.05)] dark:shadow-[0_30px_80px_rgba(0,0,0,0.5)]">
           <Reveal>
-            {/* Reduced CTA heading */}
             <h2 className={`${brushFont.className} text-5xl md:text-7xl font-black mb-6 tracking-tight text-[#3E2723] dark:text-white`}>Experience it yourself.</h2>
-            {/* Reduced CTA subtext */}
             <p className="text-lg md:text-xl text-[#6D4C41] dark:text-gray-400 mb-10 font-medium max-w-2xl mx-auto">Now that you know the region, find your perfect luxury basecamp.</p>
             <Link href="/directory">
               <button className="bg-[#3E2723] hover:bg-[#2C1A14] dark:bg-[#E8E3D9] dark:hover:bg-white dark:text-black text-white font-black uppercase tracking-widest text-sm md:text-base py-5 px-12 rounded-full transition-all active:scale-95 shadow-2xl hover:-translate-y-1 inline-flex items-center gap-3">

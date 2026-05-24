@@ -43,11 +43,10 @@ export default function Newsletter() {
   };
 
   return (
-    // 🚀 ADDED: animate-fade-in so it floats in beautifully on load/scroll 🚀
-    <section className="relative w-full max-w-[1920px] mx-auto px-4 md:px-8 py-20 z-10 animate-fade-in transition-colors duration-500">
+    <section className="relative w-full flex justify-center px-4 md:px-8 py-20 z-10 animate-fade-in transition-colors duration-500">
       
-      {/* 🚀 ADDED: hover:scale-[1.01] and hover shadows for that smooth interactive feel 🚀 */}
-      <div className="relative rounded-2xl md:rounded-3xl overflow-hidden bg-white dark:bg-[#0a0a0a] border border-gray-200/80 dark:border-gray-800/60 shadow-[0_8px_30px_rgba(0,0,0,0.04)] dark:shadow-2xl hover:shadow-[0_8px_40px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_8px_40px_rgba(255,255,255,0.03)] transform hover:scale-[1.01] transition-all duration-700 ease-out">
+      {/* 🚀 THE FIX: w-full max-w-4xl applied here to constrain the box, plus PREMIUM GLASSY classes 🚀 */}
+      <div className="w-full max-w-4xl relative rounded-[2.5rem] overflow-hidden bg-white/70 dark:bg-[#050505]/70 backdrop-blur-2xl border border-white/60 dark:border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.6)] transform hover:scale-[1.01] transition-all duration-700 ease-out">
         
         {/* Background Glow Effects */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
@@ -55,7 +54,7 @@ export default function Newsletter() {
           <div className="absolute -bottom-[50%] -right-[10%] w-[70%] h-[100%] bg-yellow-400/10 dark:bg-yellow-500/10 blur-[100px] md:blur-[120px] rounded-full mix-blend-multiply dark:mix-blend-screen transition-colors duration-500"></div>
         </div>
 
-        <div className="relative z-10 px-6 py-16 md:py-24 max-w-4xl mx-auto text-center flex flex-col items-center">
+        <div className="relative z-10 px-6 py-16 md:py-24 text-center flex flex-col items-center">
           
           <h2 className="text-xs font-bold text-orange-600 dark:text-orange-400 uppercase tracking-[0.3em] mb-4">
             Join The Inner Circle
@@ -70,7 +69,7 @@ export default function Newsletter() {
           </p>
 
           {status === "success" ? (
-            <div className="bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/30 text-green-700 dark:text-green-400 px-8 py-6 rounded-2xl flex flex-col items-center gap-3 animate-fade-in w-full max-w-md transition-colors duration-500">
+            <div className="bg-green-50/80 dark:bg-green-500/10 backdrop-blur-md border border-green-200 dark:border-green-500/30 text-green-700 dark:text-green-400 px-8 py-6 rounded-2xl flex flex-col items-center gap-3 animate-fade-in w-full max-w-md transition-colors duration-500">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
@@ -93,7 +92,7 @@ export default function Newsletter() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={status === "loading"}
-                  className="w-full h-14 bg-white dark:bg-white/5 border border-gray-300/60 dark:border-white/10 text-gray-900 dark:text-white rounded-xl pl-12 pr-4 text-sm focus:outline-none focus:border-orange-500/50 focus:bg-gray-50 dark:focus:bg-white/10 transition-all placeholder-gray-400 disabled:opacity-50 shadow-inner dark:shadow-none"
+                  className="w-full h-14 bg-white/50 dark:bg-black/20 backdrop-blur-md border border-gray-300/60 dark:border-white/10 text-gray-900 dark:text-white rounded-xl pl-12 pr-4 text-sm focus:outline-none focus:border-orange-500/50 focus:bg-white/80 dark:focus:bg-white/10 transition-all placeholder-gray-500 disabled:opacity-50 shadow-inner dark:shadow-none"
                 />
               </div>
               <button

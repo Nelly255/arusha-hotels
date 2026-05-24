@@ -1,10 +1,19 @@
 import './globals.css';
-import { Montserrat } from 'next/font/google'; 
+import { Inter, Plus_Jakarta_Sans } from 'next/font/google'; 
 import type { Metadata, Viewport } from 'next';
 
-const montserrat = Montserrat({ 
+// 🚀 1. Initialize Inter for body text
+const inter = Inter({ 
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800', '900'], 
+  variable: '--font-inter',
+  display: 'swap',
+});
+
+// 🚀 2. Initialize Plus Jakarta Sans for headings
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  variable: '--font-jakarta',
+  display: 'swap',
 });
 
 // Ensures the site is responsive and looks great on mobile
@@ -77,8 +86,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${montserrat.className} bg-[#050505] text-slate-100 antialiased selection:bg-blue-500/30`}>
+    // 🚀 3. Inject BOTH CSS variables into the HTML tag
+    <html lang="en" className={`dark ${inter.variable} ${jakarta.variable}`}>
+      {/* 🚀 4. Use font-sans (which we'll tie to Inter in Tailwind) on the body */}
+      <body className="font-sans bg-[#050505] text-slate-100 antialiased selection:bg-blue-500/30">
         {children}
       </body>
     </html>

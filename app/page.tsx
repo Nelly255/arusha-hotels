@@ -134,37 +134,43 @@ export default function LandingPage() {
         }
       `}} />
 
-      {/* 🚀 NAVIGATION 🚀 */}
+      {/* 🚀 PREMIUM NAVIGATION 🚀 */}
       <div className={`fixed top-0 left-0 w-full z-50 flex justify-center transition-all duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${isScrolled ? "pt-4 px-4" : "pt-8 px-6 md:px-12"}`}>
         <nav className={`flex items-center justify-between w-full transition-all duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
             isScrolled 
-              ? "max-w-5xl bg-white/80 dark:bg-[#0a0a0a]/80 backdrop-blur-3xl border border-gray-200/50 dark:border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.08)] dark:shadow-[0_20px_40px_rgba(0,0,0,0.8)] rounded-[2.5rem] px-6 py-3" 
+              ? "max-w-5xl bg-white/70 dark:bg-[#050505]/70 backdrop-blur-2xl border border-white/20 dark:border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.6)] rounded-[2.5rem] px-6 py-3" 
               : "max-w-[1920px] bg-transparent border-transparent rounded-none px-0 py-0"
           }`}
         >
-          <Link href="/" className="hover:opacity-80 transition-opacity drop-shadow-md">
-             <svg viewBox="0 0 450 100" preserveAspectRatio="xMinYMid meet" className={`transition-all duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] w-auto ${isScrolled ? "h-12 md:h-14" : "h-12 md:h-16"}`}>
-                <defs>
-                  <linearGradient id="sunset-home" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#FBBF24" />
-                    <stop offset="100%" stopColor="#EA580C" />
-                  </linearGradient>
-                  <clipPath id="circle-clip-home"><circle cx="45" cy="50" r="36" /></clipPath>
-                </defs>
-                <g transform="translate(0, 0)">
-                  <circle cx="45" cy="50" r="36" fill="url(#sunset-home)" />
-                  <g clipPath="url(#circle-clip-home)">
-                      <polygon points="5,80 35,35 75,80" fill="#ffffff" opacity="0.95"/>
-                      <polygon points="40,90 60,45 95,90" fill="#e5e7eb" opacity="0.7"/>
-                  </g>
-                </g>
-                <text x="105" y="54" fontWeight="900" fontSize="36" className={`transition-colors duration-500 ${isScrolled ? "fill-gray-900 dark:fill-white" : "fill-white"}`} letterSpacing="-1">Arusha Hotels</text>
-                <text x="108" y="78" fontSize="22" className={`${brushFont.className} fill-orange-600 dark:fill-orange-500`} letterSpacing="1">Rest Before The Adventure.</text>
-              </svg>
+          {/* 🚀 BOLD & PREMIUM LOGO 🚀 */}
+          <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+             <Image
+                src="/icon.png"
+                alt="Arusha Hotels Logo"
+                width={60}
+                height={60}
+                className={`transition-all duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] object-contain ${
+                  isScrolled 
+                    ? "brightness-0 dark:invert w-10 h-10 md:w-12 md:h-12" 
+                    : "brightness-0 invert w-12 h-12 md:w-14 md:h-14 drop-shadow-md"
+                }`}
+             />
+             <div className="flex flex-col justify-center">
+                <span className={`font-heading font-black tracking-tighter leading-none transition-colors duration-500 ${
+                  isScrolled ? "text-2xl md:text-3xl text-gray-900 dark:text-white" : "text-3xl md:text-4xl text-white drop-shadow-lg"
+                }`}>
+                  Arusha Hotels
+                </span>
+                <span className={`${brushFont.className} text-orange-500 tracking-wide mt-0.5 transition-all duration-300 leading-none ${
+                  isScrolled ? "text-sm md:text-base opacity-100" : "text-lg md:text-xl drop-shadow-md opacity-100"
+                }`}>
+                  Rest Before The Adventure.
+                </span>
+             </div>
           </Link>
 
           <div className={`hidden md:flex items-center transition-all duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
-            isScrolled ? "gap-6 pr-2" : "gap-8 bg-black/30 backdrop-blur-md px-8 py-3 rounded-full border border-white/10"
+            isScrolled ? "gap-6 pr-2" : "gap-8 bg-black/30 backdrop-blur-md px-8 py-3 rounded-full border border-white/10 shadow-lg"
           }`}>
              <Link href="/directory" className={`text-sm font-bold uppercase tracking-widest transition-colors ${isScrolled ? "text-gray-700 dark:text-gray-200 hover:text-orange-500 dark:hover:text-orange-400" : "text-white/90 hover:text-white"}`}>Directory</Link>
              <Link href="/favorites" className={`text-sm font-bold uppercase tracking-widest transition-colors ${isScrolled ? "text-gray-700 dark:text-gray-200 hover:text-red-500 dark:hover:text-red-400" : "text-white/90 hover:text-white"}`}>Favorites</Link>
@@ -194,14 +200,12 @@ export default function LandingPage() {
           </Reveal>
           
           <Reveal delay={100}>
-            {/* 🔥 FIXED: Changed from H2 to a 'p' tag so we don't break hierarchy 🔥 */}
             <p className={`${brushFont.className} text-3xl md:text-5xl text-orange-400 tracking-wider mb-4 drop-shadow-lg`}>
               Karibu Tanzania
             </p>
           </Reveal>
           
           <Reveal delay={200}>
-            {/* 🔥 FIXED: H1 now includes exact keywords matching the layout.tsx Title 🔥 */}
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-6 drop-shadow-2xl text-white leading-[1.1]">
               <span className="block text-2xl md:text-3xl text-white/80 font-extrabold tracking-wide mb-2 uppercase drop-shadow-md">
                 Arusha Hotels & Safari Lodges
@@ -253,7 +257,6 @@ export default function LandingPage() {
           <div className="flex overflow-x-auto gap-4 md:gap-6 pb-8 snap-x [&::-webkit-scrollbar]:hidden w-[calc(100%+2rem)] -mx-4 px-4 md:w-full md:mx-0 md:px-0">
             {VIBES.map((vibe, idx) => (
               <Reveal key={vibe.id} delay={idx * 100}>
-                {/* 🚀 PATCHED: Linking straight to the SEO category page! 🚀 */}
                 <Link href={vibe.href}>
                   <div className="relative w-64 md:w-80 aspect-[4/5] rounded-[2rem] overflow-hidden group cursor-pointer snap-start flex-shrink-0 shadow-lg dark:shadow-2xl">
                     <img src={vibe.image} alt={vibe.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
@@ -458,7 +461,6 @@ export default function LandingPage() {
         </Reveal>
       </section>
 
-      {/* 🚀 ADDED NEWSLETTER RIGHT HERE ABOVE THE FOOTER 🚀 */}
       <Newsletter />
 
       <Footer />

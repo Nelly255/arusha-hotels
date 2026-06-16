@@ -324,7 +324,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 2. THEME ADAPTIVE TRUST SECTION */}
+      {/* 2. THEME ADAPTIVE TRUST SECTION (ICONS REMOVED) */}
       <section className="py-24 relative z-10 overflow-hidden transition-colors duration-500">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-orange-500/5 dark:bg-orange-900/10 blur-[120px] rounded-full pointer-events-none"></div>
 
@@ -341,9 +341,6 @@ export default function LandingPage() {
               <div className="group relative bg-white dark:bg-[#0a0a0a] border border-gray-200 dark:border-white/10 p-10 rounded-[2.5rem] hover:border-gray-300 dark:hover:border-white/20 transition-all duration-500 hover:-translate-y-2 h-full overflow-hidden shadow-xl dark:shadow-2xl">
                 <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div className="relative z-10">
-                  <div className="w-16 h-16 bg-orange-50 dark:bg-orange-500/10 border border-orange-100 dark:border-orange-500/20 rounded-2xl flex items-center justify-center mb-8 text-orange-600 dark:text-orange-400 group-hover:scale-110 transition-all duration-500 shadow-sm dark:shadow-inner">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" /></svg>
-                  </div>
                   <h3 className="text-2xl font-black mb-4 text-gray-900 dark:text-white">Handpicked Stays</h3>
                   <p className="text-gray-600 dark:text-gray-400 leading-relaxed font-medium">Every property is strictly vetted to ensure premium quality, stunning views, and top-tier hospitality.</p>
                 </div>
@@ -354,9 +351,6 @@ export default function LandingPage() {
               <div className="group relative bg-white dark:bg-[#0a0a0a] border border-gray-200 dark:border-white/10 p-10 rounded-[2.5rem] hover:border-gray-300 dark:hover:border-white/20 transition-all duration-500 hover:-translate-y-2 h-full overflow-hidden shadow-xl dark:shadow-2xl">
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div className="relative z-10">
-                  <div className="w-16 h-16 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20 rounded-2xl flex items-center justify-center mb-8 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-all duration-500 shadow-sm dark:shadow-inner">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8"><path strokeLinecap="round" strokeLinejoin="round" d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" /></svg>
-                  </div>
                   <h3 className="text-2xl font-black mb-4 text-gray-900 dark:text-white">Live Conversions</h3>
                   <p className="text-gray-600 dark:text-gray-400 leading-relaxed font-medium">No more guessing. Toggle instantly between USD and Tanzanian Shillings based on real-time global exchange rates.</p>
                 </div>
@@ -367,9 +361,6 @@ export default function LandingPage() {
               <div className="group relative bg-white dark:bg-[#0a0a0a] border border-gray-200 dark:border-white/10 p-10 rounded-[2.5rem] hover:border-gray-300 dark:hover:border-white/20 transition-all duration-500 hover:-translate-y-2 h-full overflow-hidden shadow-xl dark:shadow-2xl">
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div className="relative z-10">
-                  <div className="w-16 h-16 bg-purple-50 dark:bg-purple-500/10 border border-purple-100 dark:border-purple-500/20 rounded-2xl flex items-center justify-center mb-8 text-purple-600 dark:text-purple-400 group-hover:scale-110 transition-all duration-500 shadow-sm dark:shadow-inner">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8"><path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" /></svg>
-                  </div>
                   <h3 className="text-2xl font-black mb-4 text-gray-900 dark:text-white">Direct Booking</h3>
                   <p className="text-gray-600 dark:text-gray-400 leading-relaxed font-medium">We don't charge hidden fees or take commissions. We connect you directly to the hotel's official booking engine.</p>
                 </div>

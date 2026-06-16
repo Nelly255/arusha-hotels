@@ -2,12 +2,6 @@
 
 import { useState } from "react";
 import { supabase } from "../lib/supabase";
-import { Caveat_Brush } from "next/font/google";
-
-const brushFont = Caveat_Brush({ 
-  weight: '400', 
-  subsets: ['latin'] 
-});
 
 export default function Newsletter() {
   const [email, setEmail] = useState("");
@@ -43,65 +37,58 @@ export default function Newsletter() {
   };
 
   return (
-    <section className="relative w-full flex justify-center px-4 md:px-8 py-20 z-10 animate-fade-in transition-colors duration-500">
+    <section className="relative w-full max-w-6xl mx-auto px-4 md:px-8 py-12 z-10 animate-fade-in transition-colors duration-500">
       
-      {/* 🚀 THE FIX: w-full max-w-4xl applied here to constrain the box, plus PREMIUM GLASSY classes 🚀 */}
-      <div className="w-full max-w-4xl relative rounded-[2.5rem] overflow-hidden bg-white/70 dark:bg-[#050505]/70 backdrop-blur-2xl border border-white/60 dark:border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.6)] transform hover:scale-[1.01] transition-all duration-700 ease-out">
+      {/* The Horizontal Banner Wrapper */}
+      <div className="w-full bg-gradient-to-r from-[#FFFCF5] to-[#FFF8ED] dark:from-[#15110d] dark:to-[#1a140f] border border-[#F5E6D3] dark:border-orange-900/30 rounded-[1.5rem] p-6 md:p-8 flex flex-col lg:flex-row items-center gap-6 lg:gap-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] dark:shadow-none transition-all duration-500">
         
-        {/* Background Glow Effects */}
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-          <div className="absolute -top-[50%] -left-[10%] w-[70%] h-[100%] bg-orange-500/10 dark:bg-orange-600/10 blur-[100px] md:blur-[120px] rounded-full mix-blend-multiply dark:mix-blend-screen transition-colors duration-500"></div>
-          <div className="absolute -bottom-[50%] -right-[10%] w-[70%] h-[100%] bg-yellow-400/10 dark:bg-yellow-500/10 blur-[100px] md:blur-[120px] rounded-full mix-blend-multiply dark:mix-blend-screen transition-colors duration-500"></div>
+        {/* Left Icon Box */}
+        <div className="flex-shrink-0 w-16 h-16 bg-white dark:bg-[#0a0a0a] rounded-2xl border border-[#F5E6D3] dark:border-orange-900/50 flex items-center justify-center text-orange-500 shadow-sm">
+          <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
         </div>
 
-        <div className="relative z-10 px-6 py-16 md:py-24 text-center flex flex-col items-center">
-          
-          <h2 className="text-xs font-bold text-orange-600 dark:text-orange-400 uppercase tracking-[0.3em] mb-4">
-            Join The Inner Circle
+        {/* Center Text Area */}
+        <div className="flex-1 text-center lg:text-left">
+          <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-2">
+            Unlock Arusha's Secrets
           </h2>
-          
-          <h3 className={`${brushFont.className} text-5xl md:text-7xl text-gray-900 dark:text-white tracking-wider mb-6 drop-shadow-sm dark:drop-shadow-md transition-colors duration-500`}>
-            Unlock Arusha's Secrets.
-          </h3>
-          
-          <p className="text-gray-600 dark:text-gray-400 text-base md:text-lg mb-10 max-w-2xl font-medium transition-colors duration-500">
+          <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 leading-relaxed max-w-2xl">
             Be the first to know when breathtaking new safari lodges and luxury hideaways are added to our directory. No spam, just pure wanderlust.
           </p>
+        </div>
 
+        {/* Right Form Area */}
+        <div className="flex-shrink-0 w-full lg:w-auto">
           {status === "success" ? (
-            <div className="bg-green-50/80 dark:bg-green-500/10 backdrop-blur-md border border-green-200 dark:border-green-500/30 text-green-700 dark:text-green-400 px-8 py-6 rounded-2xl flex flex-col items-center gap-3 animate-fade-in w-full max-w-md transition-colors duration-500">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <div className="bg-green-50/80 dark:bg-green-500/10 border border-green-200 dark:border-green-500/30 text-green-700 dark:text-green-400 px-6 py-3 rounded-xl flex items-center gap-3 animate-fade-in w-full justify-center lg:justify-start">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <p className="font-bold text-lg">Welcome to the club!</p>
-              <p className="text-sm text-green-600/80 dark:text-green-500/80">Keep an eye on your inbox.</p>
+              <div>
+                <p className="font-bold text-sm">Welcome to the club!</p>
+                <p className="text-[11px] text-green-600/80 dark:text-green-500/80">Check your inbox soon.</p>
+              </div>
             </div>
           ) : (
-            <form onSubmit={handleSubscribe} className="w-full max-w-md relative flex flex-col sm:flex-row gap-3">
-              <div className="relative flex-grow">
-                <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-gray-400 dark:text-gray-500">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                  </svg>
-                </div>
-                <input
-                  type="email"
-                  required
-                  placeholder="Enter your email address..."
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  disabled={status === "loading"}
-                  className="w-full h-14 bg-white/50 dark:bg-black/20 backdrop-blur-md border border-gray-300/60 dark:border-white/10 text-gray-900 dark:text-white rounded-xl pl-12 pr-4 text-sm focus:outline-none focus:border-orange-500/50 focus:bg-white/80 dark:focus:bg-white/10 transition-all placeholder-gray-500 disabled:opacity-50 shadow-inner dark:shadow-none"
-                />
-              </div>
+            <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 w-full max-w-md mx-auto lg:mx-0">
+              <input
+                type="email"
+                required
+                placeholder="Enter your email address..."
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={status === "loading"}
+                className="w-full sm:w-64 h-12 bg-white dark:bg-[#0a0a0a] border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white rounded-xl px-4 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all placeholder-gray-500 disabled:opacity-50 shadow-sm"
+              />
               <button
                 type="submit"
                 disabled={status === "loading"}
-                className="h-14 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-400 hover:to-yellow-400 text-gray-900 font-bold px-8 rounded-xl shadow-[0_4px_14px_0_rgba(249,115,22,0.39)] hover:shadow-[0_6px_20px_rgba(249,115,22,0.23)] hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center min-w-[140px]"
+                className="h-12 bg-[#FF5A5F] hover:bg-[#E04E53] text-white font-bold px-6 rounded-xl shadow-sm hover:shadow-md active:scale-95 transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center min-w-[120px] text-sm whitespace-nowrap"
               >
                 {status === "loading" ? (
-                  <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-gray-900"></div>
+                  <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></div>
                 ) : (
                   "Get Access"
                 )}
@@ -110,10 +97,12 @@ export default function Newsletter() {
           )}
 
           {status === "error" && (
-            <p className="mt-4 text-red-500 dark:text-red-400 text-sm font-medium animate-fade-in">{errorMessage}</p>
+            <p className="mt-2 text-red-500 dark:text-red-400 text-xs font-medium animate-fade-in text-center lg:text-left">
+              {errorMessage}
+            </p>
           )}
-
         </div>
+
       </div>
     </section>
   );

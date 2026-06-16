@@ -254,20 +254,23 @@ export default function LandingPage() {
             </div>
           </Reveal>
 
-          <div className="flex overflow-x-auto gap-4 md:gap-6 pb-8 snap-x [&::-webkit-scrollbar]:hidden w-[calc(100%+2rem)] -mx-4 px-4 md:w-full md:mx-0 md:px-0">
+          {/* 🚀 FIXED: Added an outer wrapper and moved flex-shrink-0 so cards aren't squished! 🚀 */}
+          <div className="flex overflow-x-auto gap-4 md:gap-6 pb-8 snap-x [&::-webkit-scrollbar]:hidden w-full">
             {VIBES.map((vibe, idx) => (
-              <Reveal key={vibe.id} delay={idx * 100}>
-                <Link href={vibe.href}>
-                  <div className="relative w-64 md:w-80 aspect-[4/5] rounded-[2rem] overflow-hidden group cursor-pointer snap-start flex-shrink-0 shadow-lg dark:shadow-2xl">
-                    <img src={vibe.image} alt={vibe.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
-                    <div className="absolute bottom-0 left-0 p-6 w-full transform group-hover:-translate-y-2 transition-transform duration-500">
-                      <p className="text-orange-400 font-bold text-xs uppercase tracking-widest mb-1">{vibe.desc}</p>
-                      <h4 className="text-white text-2xl font-black">{vibe.title}</h4>
+              <div key={vibe.id} className="snap-start flex-shrink-0">
+                <Reveal delay={idx * 100}>
+                  <Link href={vibe.href} className="block group cursor-pointer">
+                    <div className="relative w-[280px] md:w-[340px] aspect-[4/5] rounded-[2rem] overflow-hidden shadow-lg dark:shadow-2xl">
+                      <img src={vibe.image} alt={vibe.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+                      <div className="absolute bottom-0 left-0 p-6 w-full transform group-hover:-translate-y-2 transition-transform duration-500">
+                        <p className="text-orange-400 font-bold text-xs uppercase tracking-widest mb-1">{vibe.desc}</p>
+                        <h4 className="text-white text-2xl font-black">{vibe.title}</h4>
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              </Reveal>
+                  </Link>
+                </Reveal>
+              </div>
             ))}
           </div>
         </div>
